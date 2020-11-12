@@ -1,8 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const tenantsRouter = require('./routes/tenantsRoutes'); //this is goint to be tenentsRouter
-const userRouter = require('./routes/userRoutes'); //this is going to be the user also will log each signin/out
+const tenantsRouter = require('./routes/tenantRoutes');
+
 
 const app = express();
 
@@ -19,14 +19,15 @@ app.use((req, res, next) => {
   next();
 });
 
-//add current time to the request
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
 
 // 3) ROUTES
-app.use('/api/v1/tours', tenantsRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tenants', tenantsRouter);
+
 
 module.exports = app;
+
+
