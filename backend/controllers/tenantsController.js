@@ -1,17 +1,17 @@
 const Tenants = require('./../models/tenantsModel');
 
 exports.getAllTenants = async (req, res) => {
-  try{
-  const tenants = await Tenants.find()
+  try {
+    const tenants = await Tenants.find()
 
-  res.status(200).json({
-    status: 'success',
-    results: tenants.length,
-    data: {
-      tenants
+    res.status(200).json({
+      status: 'success',
+      results: tenants.length,
+      data: {
+        tenants
       }
     });
-  }catch(err){
+  } catch (err) {
     res.status(404).json({
       status: 'failed',
       message: err
@@ -21,21 +21,21 @@ exports.getAllTenants = async (req, res) => {
 
 // get only one tenant by name
 exports.getTenant = async (req, res) => {
- try{
-    const tenant = await Tenants.findOne({"name": req.params.name});
+  try {
+    const tenant = await Tenants.findOne({ "name": req.params.name });
     res.status(200).json({
       status: 'success',
       results: tenant.length,
       data: {
-        tenants : tenant
-        }
-      });
-   }catch(err){
+        tenants: tenant
+      }
+    });
+  } catch (err) {
     res.status(404).json({
       status: 'failed to get one tenant',
       message: err
     });
- }
+  }
 
 
 };
@@ -61,19 +61,19 @@ exports.createTenant = async (req, res) => {
 
 //find by name and update
 exports.updateTenant = async (req, res) => {
-  try{
-    const tenantUpdated = await Tenants.findOneAndUpdate({"name":req.params.name},req.body, {
+  try {
+    const tenantUpdated = await Tenants.findOneAndUpdate({ "name": req.params.name }, req.body, {
       new: true,
-      runValidators:true,
+      runValidators: true,
     });
     res.status(200).json({
       status: 'success',
       results: tenantUpdated.length,
       data: {
-        tenants:tenantUpdated
-        }
-      });
-   }catch(err){
+        tenants: tenantUpdated
+      }
+    });
+  } catch (err) {
     res.status(404).json({
       status: 'failed to get one tenant',
       message: err
@@ -83,16 +83,16 @@ exports.updateTenant = async (req, res) => {
 
 
 exports.deleteTenant = async (req, res) => {
-  try{
-    const tenantDeleted = await Tenants.findOneAndDelete({"name":req.params.name});
+  try {
+    const tenantDeleted = await Tenants.findOneAndDelete({ "name": req.params.name });
     res.status(200).json({
       status: 'success',
       results: tenantDeleted.length,
       data: {
-        tenants:tenantDeleted
-        }
-      });
-   }catch(err){
+        tenants: tenantDeleted
+      }
+    });
+  } catch (err) {
     res.status(404).json({
       status: 'failed to get one tenant',
       message: err
