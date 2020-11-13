@@ -19,7 +19,7 @@ exports.getAllTenants = async (req, res) => {
   }
 };
 
-// get only one tenant by name
+// get only one tenant by name 
 exports.getTenant = async (req, res) => {
   try {
     const tenants = await Tenants.find({ name: { $regex: '^' + req.params.name } });
