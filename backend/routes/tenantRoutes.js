@@ -1,4 +1,4 @@
-const express = require('express'); 
+const express = require('express');
 const tenantController = require('./../controllers/tenantsController');
 
 const router = express.Router();
@@ -11,6 +11,10 @@ router
 router
   .route('/:name')
   .get(tenantController.getTenant)
+
+router
+  .route('/id/:id')
+  .get(tenantController.getTenantById)
   .patch(tenantController.updateTenant)
   .delete(tenantController.deleteTenant);
 

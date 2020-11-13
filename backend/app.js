@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 const tenantsRouter = require('./routes/tenantRoutes');
-
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
 
@@ -25,8 +25,8 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-app.use('/api/v1/tenants', tenantsRouter);
-
+app.use('/api/tenants', tenantsRouter);
+app.use('/api/users', userRouter);
 
 module.exports = app;
 
