@@ -15,20 +15,29 @@ exports.getAllTenants = async (req, res) => {
     res.status(404).json({
       status: 'failed',
       message: err
-    })
+    });
   }
 };
 
-exports.getTenant = (req, res) => {
-  console.log(req.params);
-  const Tenants = Tenants.find(el => el.id === id);
+// get only one tenant by name
+exports.getTenant = async (req, res) => {
+ try{
+    const tenant = await Tenants.findOne({"name": req.params.name});
+    res.status(200).json({
+      status: 'success',
+      results: tenant.length,
+      data: {
+        tenants : tenant
+        }
+      });
+   }catch(err){
+    res.status(404).json({
+      status: 'failed to get one tenant',
+      message: err
+    });
+ }
 
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tenants
-    }
-  });
+
 };
 
 //create a new tenant
@@ -50,18 +59,43 @@ exports.createTenant = async (req, res) => {
   }
 };
 
-exports.updateTenant = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: '<Updated tour here...>'
-    }
-  });
-};
+//find by name and update
+exports.updateTenant = async (req, res) => {
+  try{
+    const tenantUpdated = await Tenants.findOneAndUpdate({"name":req.params.name},req.body, {
+      new: true,
+      runValidators:true,
+    });
+    res.status(200).json({
+      status: 'success',
+      results: tenantUpdated.length,
+      data: {
+        tenants:tenantUpdated
+        }
+      });
+   }catch(err){
+    res.status(404).json({
+      status: 'failed to get one tenant',
+      message: err
+    });
+  };
+}
 
-exports.deleteTenant = (req, res) => {
-  res.status(204).json({
-    status: 'success',
-    data: null
-  });
+
+exports.deleteTenant = async (req, res) => {
+  try{
+    const tenantDeleted = await Tenants.findOneAndDelete({"name":req.params.name});
+    res.status(200).json({
+      status: 'success',
+      results: tenantDeleted.length,
+      data: {
+        tenants:tenantDeleted
+        }
+      });
+   }catch(err){
+    res.status(404).json({
+      status: 'failed to get one tenant',
+      message: err
+    });
+  };
 };
