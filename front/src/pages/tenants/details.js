@@ -1,64 +1,58 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
-import MaterialTable from 'material-table';
+// import MaterialTable from 'material-table';
 
-import { forwardRef } from 'react';
+import { useHistory } from "react-router-dom";
 
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import { fetchAllTenants } from '../../api/tenants';
+import { fetchAllTenants, fetchTenantsByName } from '../../api/tenants';
+import {
+  Grid,
+  IconButton,
+  makeStyles,
+  MenuItem,
+  Paper,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@material-ui/core';
 
-const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
-const columns = [
-  { field: 'name', title: 'Name' },
-  { field: 'phone', title: 'Phone Number' },
-  { field: 'address', title: 'Address' },
-  { field: 'debt', title: 'Debt' },
-];
+const useStyles = makeStyles((theme) => ({
+  inputField: {
+    marginBottom: 15,
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  gridContainer: {
+    marginBottom: 20,
+  },
+}));
   
-export default function Tenants() {
+export default function Tenants({ match }) {
   const [loading, setLoading] = useState(true);
   const [tenants, setTenants] = useState([]);
   const [error, setError] = useState(null);
+
+  const [displayDebts, setDisplayDebts] = useState(0);
+
+  const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     (async () => {
       try {
         const response = await fetchAllTenants();
-        console.log('response', response);
-        setTenants(response.data);
+        setTenants(response.data.data.tenants);
       } catch (err) {
         setError(err);
       } finally {
@@ -67,28 +61,104 @@ export default function Tenants() {
     })();
   }, []);
 
-  // data={[
-  //   {
-  //     name: 'Shunit',
-  //     phone: '052-134819',
-  //     address: 'Address',
-  //     debt: 63,
-  //   },
-  // ]}
+  const handleChangeDebts = (event) => {
+    const val = event.target.value;
+    setDisplayDebts(val);
+  }
+
+  const handleChangeSearch = async (event) => {
+    const val = event.target.value;
+
+    setLoading(true);
+    try {
+      const response = await fetchTenantsByName(val);
+      setTenants(response.data.data.tenants);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // const handleDelete = (id) => {
+  //   // @TODO: complete this function
+  //   // try {
+  //   //   const response = deleteTenantById();
+  //   // } catch (err) {
+  //   // }
+  // }
+
+  const changeUrl = (task, id) => {
+    history.push(`${match.url}/${task}/${id}`);
+  }
+
+  let content;
+
+  if (loading)
+    content = <span>Loading...</span>;
+  else if (error)
+    content = <span>Error: {error.message}</span>;
+  else 
+    content = (
+      <TableContainer component={Paper}>
+        <Table size="medium">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Phone Number</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>Debt</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tenants.map((tenant) => (
+              <TableRow key={tenant._id}>
+                <TableCell component="th" scope="row">
+                  {tenant.name}
+                </TableCell>
+                <TableCell>{tenant.phoneNumber}</TableCell>
+                <TableCell>{tenant.address}</TableCell>
+                <TableCell>{tenant.debt}</TableCell>
+                <TableCell>
+                  <IconButton onClick={() => changeUrl('edit', tenant._id)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton onClick={() => changeUrl('view', tenant._id)}>
+                    <VisibilityIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
 
   return (
-    <div>
-      {!error ? (
-        <MaterialTable
-          icons={tableIcons}
-          columns={columns}
-          data={tenants}
-          title="Tenants"
-          isLoading={loading}
-        />
-      ) : (
-        `Error: ${JSON.stringify(error)}`
-      )}
-    </div>
+    <>
+      <Grid container spacing={3} className={classes.gridContainer}>
+        <Grid item xs={12} md={6}>
+            <TextField fullWidth placeholder="Search by name" onChange={handleChangeSearch} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+            <Select
+              fullWidth
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={displayDebts}
+              onChange={handleChangeDebts}
+            >
+              <MenuItem value={0}>Display all</MenuItem>
+              <MenuItem value={1}>Only tenants with debts</MenuItem>
+              <MenuItem value={2}>Only tenants without debts</MenuItem>
+            </Select>
+        </Grid>
+      </Grid>
+      {content}
+    </>
   );
 }
