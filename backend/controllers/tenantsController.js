@@ -1,21 +1,26 @@
 const Tenants = require('./../models/tenantsModel');
 
-exports.getAllTenants = (req, res) => {
-  console.log(req.requestTime);
+exports.getAllTenants = async (req, res) => {
+  try{
+  const tenants = await Tenants.find()
 
   res.status(200).json({
     status: 'success',
-    requestedAt: req.requestTime,
     results: tenants.length,
     data: {
       tenants
-    }
-  });
+      }
+    });
+  }catch(err){
+    res.status(404).json({
+      status: 'failed',
+      message: err
+    })
+  }
 };
 
 exports.getTenant = (req, res) => {
   console.log(req.params);
-
   const Tenants = Tenants.find(el => el.id === id);
 
   res.status(200).json({
