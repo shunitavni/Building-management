@@ -2,7 +2,7 @@ const Tenants = require('./../models/tenantsModel');
 
 exports.getAllTenants = async (req, res) => {
   try {
-    const tenants = await Tenants.find()
+    const tenants = await Tenants.find();
 
     res.status(200).json({
       status: 'success',
@@ -22,22 +22,20 @@ exports.getAllTenants = async (req, res) => {
 // get only one tenant by name
 exports.getTenant = async (req, res) => {
   try {
-    const tenant = await Tenants.findOne({ "name": req.params.name });
+    const tenants = await Tenants.find({ name: { $regex: '^' + req.params.name } });
     res.status(200).json({
       status: 'success',
-      results: tenant.length,
+      results: tenants.length,
       data: {
-        tenants: tenant
+        tenants
       }
     });
   } catch (err) {
-    res.status(404).json({
+    res.status(204).json({
       status: 'failed to get one tenant',
       message: err
     });
   }
-
-
 };
 
 //create a new tenant
@@ -59,37 +57,48 @@ exports.createTenant = async (req, res) => {
   }
 };
 
-//find by name and update
+//find by id and update
 exports.updateTenant = async (req, res) => {
+  console.log('body', req.body);
   try {
-    const tenantUpdated = await Tenants.findOneAndUpdate({ "name": req.params.name }, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const tenant = await Tenants.findById(req.params.id, req.body);
+    // const tenantUpdated = await Tenants.findOneAndUpdate(
+    //   { name: req.params.name },
+    //   req.body,
+    //   {
+    //     new: true,
+    //     runValidators: true
+    //   }
+    // );
+
+    tenant.name = req.body.name;
+    tenant.address = req.body.address;
+    tenant.debt = req.body.debt;
+    tenant.phoneNumber = req.body.phoneNumber;
+
+    await tenant.save();
+
     res.status(200).json({
       status: 'success',
-      results: tenantUpdated.length,
-      data: {
-        tenants: tenantUpdated
-      }
     });
   } catch (err) {
     res.status(404).json({
       status: 'failed to get one tenant',
       message: err
     });
-  };
-}
-
+  }
+};
 
 exports.deleteTenant = async (req, res) => {
   try {
-    const tenantDeleted = await Tenants.findOneAndDelete({ "name": req.params.name });
+    // const tenantDeleted = await Tenants.findOneAndDelete({
+    //   name: req.params.name
+    // });
+    const tenant = await Tenants.findById(req.params.id);
     res.status(200).json({
       status: 'success',
-      results: tenantDeleted.length,
       data: {
-        tenants: tenantDeleted
+        tenant
       }
     });
   } catch (err) {
@@ -97,5 +106,23 @@ exports.deleteTenant = async (req, res) => {
       status: 'failed to get one tenant',
       message: err
     });
-  };
+  }
+};
+
+exports.getTenantById = async (req, res) => {
+  try {
+    const tenant = await Tenants.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      results: tenant.length,
+      data: {
+        tenant: tenant
+      }
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'failed to get one tenant',
+      message: err
+    });
+  }
 };
