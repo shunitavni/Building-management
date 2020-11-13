@@ -28,20 +28,20 @@ exports.getTenant = (req, res) => {
 
 //create a new tenant
 exports.createTenant = async (req, res) => {
-  try{
-  const newTenant = await Tenants.create(req.body);
+  try {
+    const newTenant = await Tenants.create(req.body);
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tenants: newTenant
-    }
-  });
-  }catch(err){
+    res.status(201).json({
+      status: 'success',
+      data: {
+        tenants: newTenant
+      }
+    });
+  } catch (err) {
     res.status(400).json({
       status: 'failed',
-      message:err
-    })
+      message: err
+    });
   }
 };
 
