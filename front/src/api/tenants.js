@@ -14,6 +14,10 @@ export const fetchTenantById = async (id) => {
   return await axios.get(`${END_POINT}/id/${id}`);
 };
 
-export const changeTenantDetails = async(id, body) => {
+export const changeTenantDetails = async (id, body) => {
   return await axios.patch(`${END_POINT}/id/${id}`, body);
+};
+
+export const createTenant = async () => {
+  return await axios.post(END_POINT, body);
 };

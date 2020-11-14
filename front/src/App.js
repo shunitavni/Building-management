@@ -1,5 +1,6 @@
 import { Container, makeStyles } from '@material-ui/core';
-import React, { useContext, useEffect, useState } from 'react';
+//import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -21,20 +22,20 @@ const useStyles = makeStyles({
 
 function App() {
   const classes = useStyles();
-  // const [auth, setAuth] = useState(false);
-  // const { setAuth } = useContext(AuthContext);
-  
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const expiryDate = localStorage.getItem('expiryDate');
+  //const [auth, setAuth] = useState(false);
+  //const { setAuth } = useContext(AuthContext);
 
-    // Logged in
-    if(
-      token && expiryDate && new Date(expiryDate) >= new Date()
-    ) {
-// @TODO: set context to true
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token');
+  //   const expiryDate = localStorage.getItem('expiryDate');
+
+  //   // Logged in
+  //   if (
+  //     token && expiryDate && new Date(expiryDate) >= new Date()
+  //   ) {
+  //     // @TODO: set context to true
+  //   }
+  // }, []);
 
   return (
     <AuthContext.Provider value={authState}>

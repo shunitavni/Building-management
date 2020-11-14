@@ -81,7 +81,7 @@ export default function Navbar() {
               className={classes.link}
               onClick={() => history.push('/signup')}
             >
-                Sign Up
+              Sign Up
             </MuiLink>
           </nav>
           <Button
@@ -89,6 +89,7 @@ export default function Navbar() {
             color="primary"
             variant="outlined"
             className={classes.link}
+            onClick={() => history.push('/login')}
           >
             Login
           </Button>

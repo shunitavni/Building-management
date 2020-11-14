@@ -1,10 +1,13 @@
 /* eslint-disable react/display-name */
 import React, { useEffect, useState } from 'react';
 // import MaterialTable from 'material-table';
+import Button from '@material-ui/core/Button';
 
 import { useHistory } from "react-router-dom";
 
 import { fetchAllTenants, fetchTenantsByName } from '../../api/tenants';
+import CreateTenant from './new';
+
 import {
   Grid,
   IconButton,
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 20,
   },
 }));
-  
+
 export default function Tenants({ match }) {
   const [loading, setLoading] = useState(true);
   const [tenants, setTenants] = useState([]);
@@ -80,6 +83,22 @@ export default function Tenants({ match }) {
     }
   }
 
+  const handleCreate = async (event) => {
+    const val = event.target.value;
+    console.log(val);
+
+    setLoading(true);
+    try {
+      const req = await CreateTenant(val);
+      setTenants(req.body);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   // const handleDelete = (id) => {
   //   // @TODO: complete this function
   //   // try {
@@ -98,7 +117,7 @@ export default function Tenants({ match }) {
     content = <span>Loading...</span>;
   else if (error)
     content = <span>Error: {error.message}</span>;
-  else 
+  else
     content = (
       <TableContainer component={Paper}>
         <Table size="medium">
@@ -124,7 +143,7 @@ export default function Tenants({ match }) {
                   <IconButton onClick={() => changeUrl('edit', tenant._id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => {}}>
+                  <IconButton onClick={() => { }}>
                     <DeleteIcon />
                   </IconButton>
                   <IconButton onClick={() => changeUrl('view', tenant._id)}>
@@ -141,21 +160,27 @@ export default function Tenants({ match }) {
   return (
     <>
       <Grid container spacing={3} className={classes.gridContainer}>
-        <Grid item xs={12} md={6}>
-            <TextField fullWidth placeholder="Search by name" onChange={handleChangeSearch} />
+        <Grid item xs={12}>
+          <Button onClick={handleCreate} variant="contained" color="primary" component="span">
+            Add tenant
+            <br />
+          </Button>
         </Grid>
         <Grid item xs={12} md={6}>
-            <Select
-              fullWidth
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={displayDebts}
-              onChange={handleChangeDebts}
-            >
-              <MenuItem value={0}>Display all</MenuItem>
-              <MenuItem value={1}>Only tenants with debts</MenuItem>
-              <MenuItem value={2}>Only tenants without debts</MenuItem>
-            </Select>
+          <TextField fullWidth placeholder="Search by name" onChange={handleChangeSearch} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Select
+            fullWidth
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={displayDebts}
+            onChange={handleChangeDebts}
+          >
+            <MenuItem value={0}>Display all</MenuItem>
+            <MenuItem value={1}>Only tenants with debts</MenuItem>
+            <MenuItem value={2}>Only tenants without debts</MenuItem>
+          </Select>
         </Grid>
       </Grid>
       {content}
