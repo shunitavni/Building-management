@@ -51,7 +51,7 @@ export default function LoginPage() {
       const response = await logIn(email, password);
       setToken(response.token);
       setAuth(true);
-      history.push('/');
+      history.push('/tenants');
     } catch (err) {
       console.log('err', err);
       setError(err);

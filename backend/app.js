@@ -30,11 +30,10 @@ app.use('/api/users', userRouter);
 
 // 4) ERRORS
 app.use((error, req, res, next) => {
-  console.log('Error:', error);
-  const status = error.status || 422;
-  res.status(status).json({
-    status: status,
-    msg: error
+  console.log('Error :', error.toString());
+  const status = error.status || 400;
+  return res.status(status).json({
+    message: error.toString(),
   });
 });
 

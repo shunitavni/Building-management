@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { signUp } from '../api/auth';
 import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +39,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { setAuth, setToken } = useContext(AuthContext);
   const history = useHistory();
 
   const classes = useStyles();
@@ -47,10 +49,16 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      await signUp(email, password, name);
+
+      const response = await signUp(email, password, name);
+      setAuth(true);
+      setToken(response.token)
       history.push('/tenants');
     } catch (err) {
       console.log('err', err);
+      console.log('err', err.data);
+      console.log('err', JSON.stringify(err));
+      console.log('err', err.message);
       setError(err);
     } finally {
       setLoading(false);
@@ -106,6 +114,7 @@ export default function SignUpPage() {
                 value={password}
                 onChange={event => setPassword(event.target.value)}
                 autoComplete="current-password"
+                helperText=" *The password must be 8 characters long"
               />
             </Grid>
           </Grid>
@@ -119,7 +128,7 @@ export default function SignUpPage() {
             Sign Up
           </Button>
           {loading && 'Loading...'}
-          {error && JSON.stringify(error)}
+          {error && error.message}
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">

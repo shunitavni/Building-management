@@ -2,6 +2,8 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { Button } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Pricing() {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <React.Fragment>
@@ -81,6 +84,13 @@ export default function Pricing() {
         >
           Manage your building easily and comfortably
         </Typography>
+        <br />
+        <Button
+          onClick={() => history.push('/signup')}
+          variant="contained"
+          color="secondary">
+          Manage
+        </Button>
       </Container>
     </React.Fragment>
   );

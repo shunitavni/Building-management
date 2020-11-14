@@ -4,14 +4,22 @@ const tenantsSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'A tenant must have a name'],
-    unique: true
+    maxlength: [20, 'A name must have less or equal then 20 charecters']
   },
   phoneNumber: {
     type: String,
-    required: [true, 'A tenant must have a phone number']
+    required: [true, 'A tenant must have a phone number'],
+
   },
-  address: String,
-  debt: Number,
+  address: {
+    type: String,
+    required: [true, 'A tenant must have an address'],
+  },
+  debt: {
+    type: Number,
+    min: [0, 'debt is equal or greater than zero']
+
+  },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

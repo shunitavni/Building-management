@@ -50,7 +50,7 @@ function App() {
     }
 
     setLoading(false);
-  }, []);
+  }, [auth]);
 
   if (loading)
     return (
@@ -74,8 +74,8 @@ function App() {
                 auth ? (
                   <TenantsPage {...routeProps} />
                 ) : (
-                  <Redirect to="/login" />
-                )
+                    <Redirect to="/login" />
+                  )
               }
             />
             <Redirect to="/" />

@@ -70,7 +70,7 @@ export default function Tenants({ match }) {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetchTenants({name: search, debts: displayDebts, page}, token);
+        const response = await fetchTenants({ name: search, debts: displayDebts, page }, token);
         console.log('response', response);
         setTenants(response.data.data.tenants);
         setTotalPages(response.data.data.pages);
@@ -80,7 +80,7 @@ export default function Tenants({ match }) {
         setLoading(false);
       }
     })();
-  }, [page]);
+  }, [page, tenants]);
 
   const handleChangeDebts = async (event) => {
     const val = event.target.value;
@@ -88,7 +88,7 @@ export default function Tenants({ match }) {
     setLoading(true);
 
     try {
-      const response = await fetchTenants({name: search, debts: val, page}, token);
+      const response = await fetchTenants({ name: search, debts: val, page }, token);
       setTenants(response.data.data.tenants);
       setTotalPages(response.data.data.pages);
     } catch (err) {
@@ -103,7 +103,7 @@ export default function Tenants({ match }) {
 
     setLoading(true);
     try {
-      const response = await fetchTenants({name: val, debts: displayDebts, page}, token);
+      const response = await fetchTenants({ name: val, debts: displayDebts, page }, token);
       setTenants(response.data.data.tenants);
       setTotalPages(response.data.data.pages);
       setSearch(val);

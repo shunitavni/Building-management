@@ -14,7 +14,7 @@ exports.getTenants = async (req, res) => {
     case 2:
       debtsQuery = { debt: 0 };
       break;
-    default: 
+    default:
       debtsQuery = {};
       break;
   }
@@ -25,15 +25,15 @@ exports.getTenants = async (req, res) => {
   }
 
   try {
-    const tenantsQuery = Tenants.find({...debtsQuery, ...nameQuery});
+    const tenantsQuery = Tenants.find({ ...debtsQuery, ...nameQuery });
     const totalCounts = await Tenants.count({ ...debtsQuery, ...nameQuery });
-    
+
     const tenantsPaginated = await tenantsQuery
-    .skip(((page-1) || 0) * TENANTS_PER_PAGE)
-    .limit(TENANTS_PER_PAGE);
-    
+      .skip(((page - 1) || 0) * TENANTS_PER_PAGE)
+      .limit(TENANTS_PER_PAGE);
+
     const results = await tenantsQuery.countDocuments();
-    
+
     res.status(200).json({
       status: 'success',
       results,
@@ -74,7 +74,7 @@ exports.getTenants = async (req, res) => {
 exports.createTenant = async (req, res) => {
   try {
     const getCurrentUser = await Users.findById(req.userId);
-    const newTenant = await Tenants.create({...req.body, createdBy: getCurrentUser});
+    const newTenant = await Tenants.create({ ...req.body, createdBy: getCurrentUser });
 
     res.status(201).json({
       status: 'success',
@@ -83,6 +83,7 @@ exports.createTenant = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       status: 'failed',
       message: err
