@@ -2,6 +2,7 @@ const Tenants = require('./../models/tenantsModel');
 
 exports.getAllTenants = async (req, res) => {
   try {
+    console.log(req.query);
     const tenants = await Tenants.find();
 
     res.status(200).json({
