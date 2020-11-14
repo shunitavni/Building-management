@@ -93,7 +93,7 @@ export default function CreateTenant() {
       <br />
       <Button onClick={handleCreate}>Create</Button>
       <br />
-      {error && error.response?.data?.message?.errors?.name?.message || ('Unknown Error')}
+      {error && (error.response.data.message.errors)}
 
     </div>
   );
