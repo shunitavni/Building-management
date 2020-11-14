@@ -64,6 +64,7 @@ export default function Navbar() {
     setAuth(false);
     setToken('');
     history.push('/');
+    //history.go(0);
   }
 
   let content;

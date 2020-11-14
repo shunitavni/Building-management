@@ -67,7 +67,7 @@ export default function CreateTenant() {
       />
       <br />
       <TextField
-        placeholder="phoneNumber"
+        placeholder="Enter a valid phone number"
         label="Phone Number"
         value={phoneNumber}
         className={classes.input}
