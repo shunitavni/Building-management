@@ -76,7 +76,7 @@ export default function UpdateTenant({ match }) {
         ← Go back to all tenants
       </Link>
       <Typography variant="h4" gutterBottom>
-        Tenant details
+        Update Tenant details
       </Typography>
       <TextField
         placeholder="Name"
