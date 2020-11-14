@@ -5,82 +5,82 @@ const AppError = require('./../utils/appError');
 const UserRecords = require('../models/userRecordsModel');
 
 const signToken = id => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN
-    });
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-    const newUser = await User.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-    });
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+  });
 
-    await UserRecords.create({
-        event: 'Login',
-        user: newUser,
-    });
+  await UserRecords.create({
+    event: 'Login',
+    user: newUser,
+  });
 
-    //const newUser = await User.create(req.body);
+  //const newUser = await User.create(req.body);
 
-    const token = signToken(newUser._id);
+  const token = signToken(newUser._id);
 
-    res.status(201).json({
-        status: 'success',
-        token,
-        data: {
-            user: newUser
-        }
-    });
+  res.status(201).json({
+    status: 'success',
+    token,
+    data: {
+      user: newUser
+    }
+  });
 });
 
 //check process
 exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // 1) Check if email and password exist
-    if (!email || !password) {
-        return next(new AppError('Please provide email and password!', 400));
-    }
+  // 1) Check if email and password exist
+  if (!email || !password) {
+    return next(new AppError('Please provide email and password!', 400));
+  }
 
-    // 2) Check if user exist && password is correct
-    const user = await User.findOne({ email }).select('+password');
+  // 2) Check if user exist && password is correct
+  const user = await User.findOne({ email }).select('+password');
 
-    if (!user || !(await user.correctPassword(password, user.password))) {
-        return next(new AppError('Incorrect email or password', 401));
-    }
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
 
-    // 3) If everything ok, send token to client
-    const token = signToken(user._id);
+  // 3) If everything ok, send token to client
+  const token = signToken(user._id);
 
-    await UserRecords.create({
-        event: 'Login',
-        user
-    });
+  await UserRecords.create({
+    event: 'Login',
+    user
+  });
 
-    res.status(200).json({
-        status: 'success',
-        token,
-        data: {
-            user
-        },
-    });
-    //createSendToken(user, 200, res);
+  res.status(200).json({
+    status: 'success',
+    token,
+    data: {
+      user
+    },
+  });
+  //createSendToken(user, 200, res);
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.userId);
+  const user = await User.findById(req.userId);
 
-    await UserRecords.create({
-        event: 'Logout',
-        user,
-    });
+  await UserRecords.create({
+    event: 'Logout',
+    user,
+  });
 
-    res.status(201).json({
-        status: 'success',
-        data: {
-            user
-        }
-    });
+  res.status(201).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
 });

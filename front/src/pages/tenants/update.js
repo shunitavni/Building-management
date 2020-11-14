@@ -1,7 +1,8 @@
 import { Button, makeStyles, TextField, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { changeTenantDetails, fetchTenantById } from '../../api/tenants';
+import { AuthContext } from '../../context/auth';
 
 const useStyles = makeStyles(() => ({
   input: {
@@ -15,6 +16,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function UpdateTenant({ match }) {
+  const { token } = useContext(AuthContext);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updateMessage, setUpdateMessage] = useState('');
@@ -31,7 +33,7 @@ export default function UpdateTenant({ match }) {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetchTenantById(id);
+        const response = await fetchTenantById(id, token);
         const tenant = response.data.data.tenant;
 
         setName(tenant.name);
@@ -54,7 +56,7 @@ export default function UpdateTenant({ match }) {
         phoneNumber,
         debt,
         address,
-      });
+      }, token);
 
       setUpdateMessage(response.data.status);
     } catch (err) {

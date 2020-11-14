@@ -25,6 +25,8 @@ const useStyles = makeStyles((theme) => ({
   },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
+    display: 'grid',
+    placeItems: 'center',
   },
   cardHeader: {
     backgroundColor:
@@ -57,6 +59,11 @@ export default function Pricing() {
     <React.Fragment>
       {/* Hero unit */}
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
+        <img
+          src="https://img.icons8.com/material/344/client-company--v1.png"
+          alt="Logo"
+          style={{ textAlign: 'center' }}
+        />
         <Typography
           component="h1"
           variant="h2"
@@ -64,7 +71,7 @@ export default function Pricing() {
           color="textPrimary"
           gutterBottom
         >
-          Pricing
+          Tenants Manager
         </Typography>
         <Typography
           variant="h5"

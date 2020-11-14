@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { LogIn } from '../api/auth';
+import { logIn } from '../api/auth';
 import { useHistory } from 'react-router-dom';
+import { AuthContext } from '../context/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
 export default function LoginPage() {
+  const { setAuth, setToken } = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,8 +48,10 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      await LogIn(email, password);
-      history.push('/tenants');
+      const response = await logIn(email, password);
+      setToken(response.token);
+      setAuth(true);
+      history.push('/');
     } catch (err) {
       console.log('err', err);
       setError(err);
@@ -108,13 +113,6 @@ export default function LoginPage() {
             Login
           </Button>
           {loading && 'Loading...'}
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>

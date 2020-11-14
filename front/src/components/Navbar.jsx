@@ -1,9 +1,11 @@
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import MuiLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useContext } from 'react';
 // import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import { logOut } from '../api/auth';
+import { AuthContext } from '../context/auth';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -55,6 +57,66 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
   const classes = useStyles();
   const history = useHistory();
+  const { token, auth, setAuth, setToken } = useContext(AuthContext);
+
+  const handleSignOut = () => {
+    logOut(token);
+    setAuth(false);
+    setToken('');
+    history.push('/');
+  }
+
+  let content;
+
+  if (!auth) {
+    content = (
+      <>
+        <nav>
+          <MuiLink
+            variant="button"
+            color="textPrimary"
+            href="#"
+            className={classes.link}
+            onClick={() => history.push('/signup')}
+          >
+            Sign Up
+          </MuiLink>
+        </nav>
+        <Button
+          href="#"
+          color="primary"
+          variant="outlined"
+          className={classes.link}
+          onClick={() => history.push('/login')}
+        >
+          Login
+        </Button>
+      </>
+    );
+  } else {
+    content = (
+      <>
+        <MuiLink
+          variant="button"
+          color="textPrimary"
+          href="#"
+          className={classes.link}
+          onClick={() => history.push('/tenants')}
+        >
+          Tenants
+        </MuiLink>
+        <MuiLink
+          variant="button"
+          color="textPrimary"
+          href="#"
+          className={classes.link}
+          onClick={handleSignOut}
+        >
+          Logout
+        </MuiLink>
+      </>
+    );
+  }
 
   return (
     <>
@@ -71,28 +133,9 @@ export default function Navbar() {
             noWrap
             className={classes.toolbarTitle}
           >
-            Company name
+            Shunit Company
           </Typography>
-          <nav>
-            <MuiLink
-              variant="button"
-              color="textPrimary"
-              href="#"
-              className={classes.link}
-              onClick={() => history.push('/signup')}
-            >
-              Sign Up
-            </MuiLink>
-          </nav>
-          <Button
-            href="#"
-            color="primary"
-            variant="outlined"
-            className={classes.link}
-            onClick={() => history.push('/login')}
-          >
-            Login
-          </Button>
+         {content} 
         </Toolbar>
       </AppBar>
     </>

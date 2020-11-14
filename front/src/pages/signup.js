@@ -57,9 +57,6 @@ export default function SignUpPage() {
     }
   }
   
-  if (error)
-    return <span>Some error!</span>;
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -122,9 +119,10 @@ export default function SignUpPage() {
             Sign Up
           </Button>
           {loading && 'Loading...'}
+          {error && JSON.stringify(error) }
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
