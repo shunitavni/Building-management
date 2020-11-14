@@ -1,16 +1,16 @@
 const express = require('express');
-const tenantController = require('./../controllers/tenantsController');
+const tenantController = require('../controllers/tenantsController');
 
 const router = express.Router();
 
 router
   .route('/')
-  .get(tenantController.getAllTenants)
+  .get(tenantController.getTenants)
   .post(tenantController.createTenant);
 
-router
-  .route('/:name')
-  .get(tenantController.getTenant)
+// router
+//   .route('/:name')
+//   .get(tenantController.getTenant)
 
 router
   .route('/id/:id')
