@@ -1,7 +1,9 @@
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import MuiLink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+// import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   '@global': {
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar() {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <>
@@ -71,30 +74,15 @@ export default function Navbar() {
             Company name
           </Typography>
           <nav>
-            <Link
+            <MuiLink
               variant="button"
               color="textPrimary"
               href="#"
               className={classes.link}
+              onClick={() => history.push('/signup')}
             >
-              Features
-            </Link>
-            <Link
-              variant="button"
-              color="textPrimary"
-              href="#"
-              className={classes.link}
-            >
-              Enterprise
-            </Link>
-            <Link
-              variant="button"
-              color="textPrimary"
-              href="#"
-              className={classes.link}
-            >
-              Support
-            </Link>
+                Sign Up
+            </MuiLink>
           </nav>
           <Button
             href="#"

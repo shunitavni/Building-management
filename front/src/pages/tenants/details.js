@@ -124,7 +124,7 @@ export default function Tenants({ match }) {
                   <IconButton onClick={() => changeUrl('edit', tenant._id)}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton onClick={() => handleDelete(id)}>
+                  <IconButton onClick={() => {}}>
                     <DeleteIcon />
                   </IconButton>
                   <IconButton onClick={() => changeUrl('view', tenant._id)}>
