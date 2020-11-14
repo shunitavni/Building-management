@@ -95,7 +95,7 @@ exports.deleteTenant = async (req, res) => {
     // const tenantDeleted = await Tenants.findOneAndDelete({
     //   name: req.params.name
     // });
-    const tenant = await Tenants.findById(req.params.id);
+    const tenant = await Tenants.findByIdAndDelete(req.params.id);
     res.status(200).json({
       status: 'success',
       data: {
