@@ -49,14 +49,14 @@ export default function SignUpPage() {
     try {
       await signUp(email, password, name);
       history.push('/tenants');
-    } catch(err) {
+    } catch (err) {
       console.log('err', err);
       setError(err);
     } finally {
       setLoading(false);
     }
   }
-  
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -119,7 +119,7 @@ export default function SignUpPage() {
             Sign Up
           </Button>
           {loading && 'Loading...'}
-          {error && JSON.stringify(error) }
+          {error && JSON.stringify(error)}
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">

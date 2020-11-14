@@ -133,9 +133,9 @@ export default function Navbar() {
             noWrap
             className={classes.toolbarTitle}
           >
-            Shunit Company
+            OXS
           </Typography>
-         {content} 
+          {content}
         </Toolbar>
       </AppBar>
     </>

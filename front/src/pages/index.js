@@ -71,7 +71,7 @@ export default function Pricing() {
           color="textPrimary"
           gutterBottom
         >
-          Tenants Manager
+          Building management
         </Typography>
         <Typography
           variant="h5"
@@ -79,9 +79,7 @@ export default function Pricing() {
           color="textSecondary"
           component="p"
         >
-          Quickly build an effective pricing table for your potential customers
-          with this layout. It&apos;s built with default Material-UI components
-          with little customization.
+          Manage your building easily and comfortably
         </Typography>
       </Container>
     </React.Fragment>
