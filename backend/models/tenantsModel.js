@@ -6,7 +6,6 @@ const tenantsSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A tenant must have a name'],
     maxlength: [20, 'A name must have less or equal then 20 charecters'],
-
   },
   phoneNumber: {
     type: String,
