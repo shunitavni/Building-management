@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
 });
 
 //pre middleware
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // Only run this function if password was modified
   if (!this.isModified('password')) return next();
 
@@ -48,7 +48,7 @@ userSchema.pre('save', async function(next) {
 });
 
 // instance method will be avilable in each document
-userSchema.methods.correctPassword = async function(
+userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
