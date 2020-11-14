@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please enter your name'],
+    required: [true, 'Please enter your name']
   },
   //email as a username
   email: {
@@ -21,23 +21,22 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide a password'],
     minlength: 8,
     select: false
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      // this is only works on CREATE and SAVE !!
-      validator: function (el) {
-        return el === this.password; // abc === abc
-      },
-      message: 'Passwords are not the same',
-    }
   }
-
+  // passwordConfirm: {
+  //   type: String,
+  //   required: [true, 'Please confirm your password'],
+  //   validate: {
+  //     // this is only works on CREATE and SAVE !!
+  //     validator: function (el) {
+  //       return el === this.password; // abc === abc
+  //     },
+  //     message: 'Passwords are not the same',
+  //   }
+  // }
 });
 
-//pre middleware 
-userSchema.pre('save', async function (next) {
+//pre middleware
+userSchema.pre('save', async function(next) {
   // Only run this function if password was modified
   if (!this.isModified('password')) return next();
 
@@ -46,12 +45,14 @@ userSchema.pre('save', async function (next) {
   //delete password conirm field
   this.passwordConfirm = undefined;
   next();
-
 });
 
 // instance method will be avilable in each document
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
-  return await bcrypt.compare(candidatePassword, userPassword)
+userSchema.methods.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
 };
 
 const User = mongoose.model('User', userSchema);
