@@ -21,7 +21,7 @@ exports.getTenants = async (req, res) => {
 
   let nameQuery = {};
   if (name) {
-    nameQuery = { name: { $regex: '^' + name } };
+    nameQuery = { name: { $regex: new RegExp(name, 'i') } };
   }
 
   try {

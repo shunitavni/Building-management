@@ -71,7 +71,6 @@ export default function Tenants({ match }) {
     (async () => {
       try {
         const response = await fetchTenants({ name: search, debts: displayDebts, page }, token);
-        console.log('response', response);
         setTenants(response.data.data.tenants);
         setTotalPages(response.data.data.pages);
       } catch (err) {
@@ -80,7 +79,7 @@ export default function Tenants({ match }) {
         setLoading(false);
       }
     })();
-  }, [page, tenants]);
+  }, [page]);
 
   const handleChangeDebts = async (event) => {
     const val = event.target.value;

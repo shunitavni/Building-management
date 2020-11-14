@@ -55,10 +55,7 @@ export default function SignUpPage() {
       setToken(response.token)
       history.push('/tenants');
     } catch (err) {
-      console.log('err', err);
-      console.log('err', err.data);
-      console.log('err', JSON.stringify(err));
-      console.log('err', err.message);
+      console.log('err', err.response.data.message);
       setError(err);
     } finally {
       setLoading(false);
@@ -128,7 +125,7 @@ export default function SignUpPage() {
             Sign Up
           </Button>
           {loading && 'Loading...'}
-          {error && error.message}
+          {error && error.response.data.message}
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/login" variant="body2">
